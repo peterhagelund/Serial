@@ -6,7 +6,7 @@ POSIX serial port, for macOS and Linux, written in Swift.
 
 Copyright (c) 2019 Peter Hagelund
 
-This software is licensed under the [MIT Lincense](https://en.wikipedia.org/wiki/MIT_License)
+This software is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License)
 
 See `LICENSE.txt`
 
