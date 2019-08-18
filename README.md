@@ -12,7 +12,7 @@ See `LICENSE.txt`
 
 ## Installation and Setup
 
-* Clone the repository (`git clone https://github.com/peterhagelund/Serial`)
+* Clone the repository (`git clone https://github.com/peterhagelund/Serial.git`)
 * `cd Serial/`
 * `swift build`
 * `swift package generate-xcodeproj`
@@ -58,7 +58,7 @@ For projects that depend upon `Serial`, make sure `Package.swift` contains the c
                 targets: ["<your target>"]),
         ],
         dependencies: [
-           .package(url: "https://github.com/peterhagelund/Serial")
+           .package(url: "https://github.com/peterhagelund/Serial.git")
            .package(url: "https://github.com/...")
            .package(url: "https://github.com/...")
         ],
