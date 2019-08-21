@@ -346,6 +346,33 @@ public class SerialPort {
         return buffer
     }
     
+    /// Attempts to read the specified number of bytes.
+    ///
+    /// - Parameter count: The number of bytes to read.
+    /// - Returns: The requested bytes (which may be empty).
+    /// - Throws: `POSIXError` if the bytes cannot be read.
+    public func read(count: Int) throws -> [UInt8] {
+        let buffer = [UInt8](repeating: 0x00, count: count)
+        var data = UnsafeMutableRawPointer(mutating: buffer)
+        var bytesRead: Int
+        #if os(Linux)
+        bytesRead = Glibc.read(fd, data, buffer.count)
+        #else
+        bytesRead = Darwin.read(fd, data, buffer.count)
+        #endif
+        guard bytesRead != -1 else {
+            let code = POSIXErrorCode(rawValue: errno) ?? .EIO
+            guard code == .EAGAIN else {
+                throw POSIXError(code)
+            }
+            return [UInt8]()
+        }
+        guard bytesRead == buffer.count else {
+            return Array(buffer[0..<bytesRead])
+        }
+        return buffer
+    }
+    
     /// Attempts to write the specified buffer of bytes within the timeout period.
     ///
     /// - Parameters:
@@ -377,5 +404,28 @@ public class SerialPort {
                 data = data.advanced(by: bytesWritten)
             }
         }
+    }
+    
+    /// Attempts to write the specified buffer.
+    ///
+    /// - Parameter buffer: The buffer of bytes to write.
+    /// - Returns: The actual number of bytes written (may be `0`).
+    /// - Throws: `POSIXError` if the bytes cannot be written.
+    public func write(buffer: [UInt8]) throws -> Int {
+        let data = UnsafeRawPointer(buffer)
+        var bytesWritten: Int
+        #if os(Linux)
+        bytesWritten = Glibc.write(fd, data, buffer.count)
+        #else
+        bytesWritten = Darwin.write(fd, data, buffer.count)
+        #endif
+        guard bytesWritten != -1 else {
+            let code = POSIXErrorCode(rawValue: errno) ?? .EIO
+            guard code == .EAGAIN else {
+                throw POSIXError(code)
+            }
+            return 0
+        }
+        return bytesWritten
     }
 }
