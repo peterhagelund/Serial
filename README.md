@@ -58,7 +58,7 @@ For projects that depend upon `Serial`, make sure `Package.swift` contains the c
                 targets: ["<your target>"]),
         ],
         dependencies: [
-            .package(url: "https://github.com/peterhagelund/Serial.git", from: "1.0.0")
+            .package(url: "https://github.com/peterhagelund/Serial.git", from: "1.0.1")
             .package(url: "https://github.com/...", from: "...")
             .package(url: "https://github.com/...", from: "...")
         ],
